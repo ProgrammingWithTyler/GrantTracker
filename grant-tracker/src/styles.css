@@ -1,7 +1,12 @@
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
+html, body {
+  height: 100%;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .main-container {
   padding: 1rem;
@@ -14,3 +19,4 @@ mat-toolbar {
   color: white;
 }
 
+/*# sourceMappingURL=styles.css.map */

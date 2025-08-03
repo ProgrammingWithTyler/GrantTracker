@@ -1,0 +1,27 @@
+.centered-header {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.error {
+  color: #d32f2f;
+  font-size: 0.875rem;
+  margin-top: 4px;
+  display: block;
+  transition: opacity 0.2s ease-in;
+  opacity: 1;
+}
+
+.ng-invalid.ng-touched + .error {
+  opacity: 1;
+}
+
+input.ng-touched.ng-invalid {
+  border: 1px solid #d32f2f;
+  outline: none;
+}
+
+input.ng-touched.ng-valid {
+  border: 1px solid #2e7d32; // Material Green 800
+}

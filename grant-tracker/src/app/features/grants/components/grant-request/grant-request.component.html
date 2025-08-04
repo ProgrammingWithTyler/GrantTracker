@@ -1,0 +1,82 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="grant-form" novalidate>
+
+  <h2>Grant Request Submission</h2>
+
+  <!-- Title Field -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Grant Title</mat-label>
+    <input matInput formControlName="title" placeholder="Enter grant title" required />
+    <mat-error *ngIf="form.get('title')?.hasError('required')">
+      Title is required.
+    </mat-error>
+    <mat-error *ngIf="form.get('title')?.hasError('minlength')">
+      Title must be at least 6 characters.
+    </mat-error>
+    <mat-error *ngIf="form.get('title')?.hasError('maxlength')">
+      Title cannot exceed 100 characters.
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Justification Field -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Justification</mat-label>
+    <textarea matInput formControlName="justification"
+              placeholder="Explain why you need this grant and how it will be used..."
+              required rows="5"></textarea>
+    <mat-error *ngIf="form.get('justification')?.hasError('required')">
+      Justification is required.
+    </mat-error>
+    <mat-error *ngIf="form.get('justification')?.hasError('minlength')">
+      Justification must be at least 20 characters.
+    </mat-error>
+    <mat-error *ngIf="form.get('justification')?.hasError('maxlength')">
+      Justification cannot exceed 1000 characters.
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Amount Requested Field -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Amount Requested</mat-label>
+    <input matInput type="number" formControlName="amountRequested"
+           placeholder="Enter amount" required />
+    <span matPrefix>$ </span>
+    <mat-error *ngIf="form.get('amountRequested')?.hasError('required')">
+      Amount is required.
+    </mat-error>
+    <mat-error *ngIf="form.get('amountRequested')?.hasError('min')">
+      Amount must be at least $100.
+    </mat-error>
+    <mat-error *ngIf="form.get('amountRequested')?.hasError('max')">
+      Amount cannot exceed $1,000,000.
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Grant Type Field -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Grant Type</mat-label>
+    <mat-select formControlName="grantType">
+      <mat-option *ngFor="let type of grantTypes" [value]="type.value">
+        {{ type.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Submission Date  Field -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Submission Date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="submissionDate" required />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="form.get('submissionDate')?.hasError('required')">
+      Submission date is required.
+    </mat-error>
+  </mat-form-field>
+
+
+
+  <!-- Submit Button -->
+  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+    Submit Grant Request
+  </button>
+
+</form>

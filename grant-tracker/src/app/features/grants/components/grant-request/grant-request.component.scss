@@ -34,3 +34,9 @@ button[mat-raised-button] {
     align-self: stretch; // Full width on mobile
   }
 }
+
+.success-snackbar {
+  background-color: #4caf50; // Material green
+  color: white;
+  font-weight: 600;
+}

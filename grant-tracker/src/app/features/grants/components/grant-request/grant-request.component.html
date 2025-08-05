@@ -75,8 +75,10 @@
 
 
   <!-- Submit Button -->
-  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
-    Submit Grant Request
+  <button mat-raised-button color="primary" [disabled]="form.invalid || isSubmitting">
+    <mat-spinner *ngIf="isSubmitting" [diameter]="20" strokeWidth="3"></mat-spinner>
+    <span *ngIf="!isSubmitting">Submit</span>
   </button>
+
 
 </form>

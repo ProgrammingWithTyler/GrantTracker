@@ -32,5 +32,10 @@ button[mat-raised-button] {
     align-self: stretch;
   }
 }
+.success-snackbar {
+  background-color: #4caf50;
+  color: white;
+  font-weight: 600;
+}
 
 /*# sourceMappingURL=grant-request.component.css.map */

@@ -21,3 +21,8 @@ mat-toolbar {
   flex-direction: column;
   gap: 16px;
 }
+
+.error-snackbar {
+  background-color: #f44336; // red color for errors
+  color: white;
+}

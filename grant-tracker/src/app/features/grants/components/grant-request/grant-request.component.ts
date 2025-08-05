@@ -9,6 +9,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
 @Component({
@@ -22,7 +24,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatIconModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatProgressSpinner,
   ],
   templateUrl: './grant-request.component.html',
   styleUrls: ['./grant-request.component.scss']
@@ -30,6 +33,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 export class GrantRequestComponent {
   form: FormGroup;
   errorMessage = '';
+  isSubmitting = false;
 
   // Placeholder grant types (not functional yet)
   grantTypes = [
@@ -38,7 +42,7 @@ export class GrantRequestComponent {
     { value: 'community', label: 'Community Development' }
   ];
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private snackBar: MatSnackBar) {
     this.form = this.fb.group({
 
       // Grant Request Details (renamed/updated fields)
@@ -57,6 +61,32 @@ export class GrantRequestComponent {
     }
 
     console.log('Grant Request Form Data:', this.form.value);
-    // TODO: Backend integration
+
+    this.isSubmitting = true;
+    setTimeout(() => {
+      this.isSubmitting = false;
+      this.snackBar.open('Grant request submitted successfully!', 'Dismiss', {
+        duration: 4000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['success-snackbar']
+      });
+      this.resetForm();
+
+      // Navigate only after showing snackbar
+      // this.router.navigate(['/grants']);
+    }, 2000);
   }
+
+  resetForm() {
+    this.form.reset();
+    Object.values(this.form.controls).forEach(control => {
+      control.setErrors(null);
+      control.markAsPristine();
+      control.markAsUntouched();
+    });
+    this.form.patchValue({ submissionDate: new Date() });
+  }
+
+
 }

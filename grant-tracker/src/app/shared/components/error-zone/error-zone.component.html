@@ -1,0 +1,6 @@
+<mat-card *ngIf="errorMessage as message" class="error-zone mat-elevation-z2">
+  <mat-card-content class="error-content">
+    <mat-icon color="warn" aria-hidden="true">error</mat-icon>
+    <span class="error-message">{{ message }}</span>
+  </mat-card-content>
+</mat-card>

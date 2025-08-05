@@ -11,6 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ErrorZoneComponent } from '../../../../shared/components/error-zone/error-zone.component';
 
 
 @Component({
@@ -26,14 +27,15 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressSpinner,
+    ErrorZoneComponent,
   ],
   templateUrl: './grant-request.component.html',
   styleUrls: ['./grant-request.component.scss']
 })
 export class GrantRequestComponent {
   form: FormGroup;
-  errorMessage = '';
   isSubmitting = false;
+  submitError: string | null = null;
 
   // Placeholder grant types (not functional yet)
   grantTypes = [
@@ -63,15 +65,23 @@ export class GrantRequestComponent {
     console.log('Grant Request Form Data:', this.form.value);
 
     this.isSubmitting = true;
+
     setTimeout(() => {
       this.isSubmitting = false;
-      this.snackBar.open('Grant request submitted successfully!', 'Dismiss', {
-        duration: 4000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-        panelClass: ['success-snackbar']
-      });
-      this.resetForm();
+      const isSuccess = Math.random() > 0.8;
+      this.submitError = null;
+
+      if (isSuccess) {
+        this.snackBar.open('Grant request submitted successfully!', 'Dismiss', {
+          duration: 4000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        });
+        this.resetForm();
+      } else {
+        this.submitError = 'Unable to submit grant request. Please try again later.';
+      }
 
       // Navigate only after showing snackbar
       // this.router.navigate(['/grants']);
@@ -87,6 +97,4 @@ export class GrantRequestComponent {
     });
     this.form.patchValue({ submissionDate: new Date() });
   }
-
-
 }

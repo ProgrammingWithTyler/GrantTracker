@@ -1,83 +1,113 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grant-form" novalidate>
 
-  <h2>Grant Request Submission</h2>
+  <!-- Simple Header -->
+  <div class="form-header">
+    <h1>Grant Request Submission</h1>
+    <p class="subtitle">Please provide information about your grant request</p>
+  </div>
 
-  <!-- Title Field -->
-  <mat-form-field appearance="fill" class="full-width">
+  <!-- Basic Information -->
+  <h3 class="section-title">
+    <mat-icon>info</mat-icon>
+    Basic Information
+  </h3>
+
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Grant Title</mat-label>
-    <input matInput formControlName="title" placeholder="Enter grant title" required />
-    <mat-error *ngIf="form.get('title')?.hasError('required')">
-      Title is required.
-    </mat-error>
-    <mat-error *ngIf="form.get('title')?.hasError('minlength')">
-      Title must be at least 6 characters.
-    </mat-error>
-    <mat-error *ngIf="form.get('title')?.hasError('maxlength')">
-      Title cannot exceed 100 characters.
-    </mat-error>
+    <input matInput
+           formControlName="title"
+           placeholder="Enter grant title"
+           required />
+    <mat-hint>6-100 characters</mat-hint>
+    <mat-error *ngIf="getFieldError('title') as err">{{ err }}</mat-error>
   </mat-form-field>
 
-  <!-- Justification Field -->
-  <mat-form-field appearance="fill" class="full-width">
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Justification</mat-label>
-    <textarea matInput formControlName="justification"
-              placeholder="Explain why you need this grant and how it will be used..."
-              required rows="5"></textarea>
-    <mat-error *ngIf="form.get('justification')?.hasError('required')">
-      Justification is required.
-    </mat-error>
-    <mat-error *ngIf="form.get('justification')?.hasError('minlength')">
-      Justification must be at least 20 characters.
-    </mat-error>
-    <mat-error *ngIf="form.get('justification')?.hasError('maxlength')">
-      Justification cannot exceed 1000 characters.
-    </mat-error>
+    <textarea matInput
+              formControlName="justification"
+              placeholder="Explain why you need this grant..."
+              required
+              rows="5"></textarea>
+    <mat-hint>20-1000 characters</mat-hint>
+    <mat-error *ngIf="getFieldError('justification') as err">{{ err }}</mat-error>
   </mat-form-field>
 
-  <!-- Amount Requested Field -->
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Amount Requested</mat-label>
-    <input matInput type="number" formControlName="amountRequested"
-           placeholder="Enter amount" required />
-    <span matPrefix>$ </span>
-    <mat-error *ngIf="form.get('amountRequested')?.hasError('required')">
-      Amount is required.
-    </mat-error>
-    <mat-error *ngIf="form.get('amountRequested')?.hasError('min')">
-      Amount must be at least $100.
-    </mat-error>
-    <mat-error *ngIf="form.get('amountRequested')?.hasError('max')">
-      Amount cannot exceed $1,000,000.
-    </mat-error>
-  </mat-form-field>
+  <!-- Financial Details -->
+  <h3 class="section-title">
+    <mat-icon>attach_money</mat-icon>
+    Financial Details
+  </h3>
 
-  <!-- Grant Type Field -->
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Grant Type</mat-label>
-    <mat-select formControlName="grantType">
-      <mat-option *ngFor="let type of grantTypes" [value]="type.value">
-        {{ type.label }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Amount Requested</mat-label>
+      <input matInput
+             type="number"
+             formControlName="amountRequested"
+             placeholder="0"
+             required />
+      <span matPrefix>$ </span>
+      <mat-hint>$100 - $1,000,000</mat-hint>
+      <mat-error *ngIf="getFieldError('amountRequested') as err">{{ err }}</mat-error>
+    </mat-form-field>
 
-  <!-- Submission Date  Field -->
-  <mat-form-field appearance="fill" class="full-width">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Grant Type</mat-label>
+      <mat-select formControlName="grantType">
+        <mat-option [value]="''">Select type (optional)</mat-option>
+        <mat-option *ngFor="let type of grantTypes" [value]="type.value">
+          {{ type.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Timeline -->
+  <h3 class="section-title">
+    <mat-icon>schedule</mat-icon>
+    Timeline
+  </h3>
+
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Submission Date</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="submissionDate" required />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <input matInput
+           [matDatepicker]="picker"
+           formControlName="submissionDate"
+           required
+           readonly />
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
-    <mat-error *ngIf="form.get('submissionDate')?.hasError('required')">
-      Submission date is required.
-    </mat-error>
+    <mat-error *ngIf="getFieldError('submissionDate') as err">{{ err }}</mat-error>
   </mat-form-field>
 
-  <gt-error-zone [errorMessage]="submitError"></gt-error-zone>
+  <!-- Actions -->
+  <div class="submit-section">
+    <button type="button"
+            mat-button
+            color="warn"
+            (click)="resetForm()"
+            [disabled]="isSubmitting">
+      Reset
+    </button>
 
-  <!-- Submit Button -->
-  <button mat-raised-button color="primary" [disabled]="form.invalid || isSubmitting">
-    <mat-spinner *ngIf="isSubmitting" [diameter]="20" strokeWidth="3"></mat-spinner>
-    <span *ngIf="!isSubmitting">Submit</span>
-  </button>
+    <button type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="form.invalid || isSubmitting">
+      <div class="loading-content" *ngIf="isSubmitting">
+        <mat-spinner diameter="20"></mat-spinner>
+        <span>Submitting...</span>
+      </div>
+      <span *ngIf="!isSubmitting">Submit Request</span>
+    </button>
+  </div>
 
 </form>
+
+<gt-error-zone
+  [errorMessage]="submitError"
+  [autoDismiss]="false"
+  [showRetry]="true"
+  (retry)="handleRetry()"
+  (dismiss)="handleDismiss()"/>

@@ -1,3 +1,4 @@
+/* Container & Layout */
 .grant-list-container {
   padding: 24px;
   max-width: 1200px;
@@ -19,13 +20,18 @@
   margin: 8px 0 0 0;
 }
 
+/* Grid Layout */
 .grants-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
 }
 
+/* Card Styles */
 .grant-card {
+  padding: 12px 12px; /* reduced padding */
+  margin: 0;
+  max-width: 400px;
   transition: box-shadow 0.2s ease;
 }
 
@@ -33,17 +39,35 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
+/* Material Card Sections */
+mat-card-header {
+  padding-bottom: 8px;
+}
+
+mat-card-content {
+  padding-top: 4px;
+  padding-bottom: 8px;
+}
+
+mat-card-actions {
+  padding: 8px 16px;
+}
+
+/* Grant Details */
 .grant-details {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin: 16px 0;
+  gap: 8px; /* tightened gap */
+  margin: 8px 0; /* tightened margin */
+}
+
+.amount, .dates, .contact {
+  gap: 6px; /* smaller gaps */
 }
 
 .amount {
   display: flex;
   align-items: center;
-  gap: 8px;
   font-size: 18px;
   font-weight: 500;
 }
@@ -55,7 +79,6 @@
 .dates {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .date-item, .contact {
@@ -70,16 +93,12 @@
   margin-top: 4px;
 }
 
-mat-card-actions {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-}
-
+/* Utility */
 .spacer {
   flex: 1;
 }
 
+/* Status Chips */
 .status-chip {
   font-weight: 500;
 }
@@ -104,18 +123,95 @@ mat-card-actions {
   color: #616161;
 }
 
+/* Loading State */
 .loading {
   text-align: center;
   padding: 48px;
   color: rgba(0, 0, 0, 0.6);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .grants-grid {
     grid-template-columns: 1fr;
   }
   .grant-list-container {
     padding: 16px;
+  }
+}
+/* Skeleton Loader Styles */
+.skeleton-card {
+  cursor: default;
+  padding: 12px 16px; /* match card padding */
+  border-radius: 8px; /* slight rounding */
+}
+
+.skeleton-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12); /* same hover effect */
+}
+
+.skeleton-line {
+  background: #f0f0f0;
+  border-radius: 4px;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.title-skeleton {
+  height: 20px;
+  width: 70%;
+  margin-bottom: 8px;
+}
+
+.subtitle-skeleton {
+  height: 16px;
+  width: 50%;
+}
+
+.amount-skeleton {
+  height: 18px;
+  width: 100px;
+}
+
+.date-skeleton {
+  height: 14px;
+  width: 140px;
+}
+
+.email-skeleton {
+  height: 14px;
+  width: 180px;
+}
+
+.status-skeleton {
+  height: 24px;
+  width: 80px;
+  border-radius: 12px;
+}
+
+.button-skeleton {
+  height: 36px;
+  width: 100px;
+  border-radius: 4px;
+}
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-color: #f0f0f0;
+  }
+  50% {
+    background-color: #e0e0e0;
+  }
+  100% {
+    background-color: #f0f0f0;
   }
 }
 

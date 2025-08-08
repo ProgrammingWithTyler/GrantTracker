@@ -4,7 +4,44 @@
     <p class="subtitle">Track and manage educational grants</p>
   </div>
 
-  <div class="grants-grid" *ngIf="grants$ | async as grants">
+  <div *ngIf="isLoading" class="grants-grid">
+    <mat-card *ngFor="let skeleton of [1,2,3]" class="grant-card skeleton-card">
+      <mat-card-header>
+        <div class="skeleton-line title-skeleton"></div>
+        <div class="skeleton-line subtitle-skeleton"></div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="grant-details">
+          <div class="amount">
+            <div class="skeleton-circle"></div>
+            <div class="skeleton-line amount-skeleton"></div>
+          </div>
+          <div class="dates">
+            <div class="date-item">
+              <div class="skeleton-circle"></div>
+              <div class="skeleton-line date-skeleton"></div>
+            </div>
+            <div class="date-item">
+              <div class="skeleton-circle"></div>
+              <div class="skeleton-line date-skeleton"></div>
+            </div>
+          </div>
+          <div class="contact">
+            <div class="skeleton-circle"></div>
+            <div class="skeleton-line email-skeleton"></div>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <div class="skeleton-line status-skeleton"></div>
+        <div class="spacer"></div>
+        <div class="skeleton-line button-skeleton"></div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- YOUR ORIGINAL CODE - Just change the *ngIf condition -->
+  <div class="grants-grid" *ngIf="!isLoading && (grants$ | async) as grants">
     <mat-card *ngFor="let grant of grants" class="grant-card">
       <mat-card-header>
         <mat-card-title>{{ grant.title }}</mat-card-title>
@@ -46,9 +83,5 @@
         <button mat-button color="primary">View Details</button>
       </mat-card-actions>
     </mat-card>
-  </div>
-
-  <div *ngIf="!(grants$ | async)" class="loading">
-    <p>Loading grants...</p>
   </div>
 </div>

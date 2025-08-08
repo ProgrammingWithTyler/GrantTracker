@@ -23,9 +23,15 @@ import {MatButtonModule} from '@angular/material/button';
 export class GrantListComponent implements OnInit {
   grants$!: Observable<Grant[]>;
 
+  isLoading = true;
+
   constructor(private grantDataService: GrantDataService) {}
 
   ngOnInit(): void {
     this.grants$ = this.grantDataService.getGrants();
+
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000); // Show skeleton for 2 seconds
   }
 }

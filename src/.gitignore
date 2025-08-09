@@ -12,3 +12,9 @@ dist/
 
 # Env files
 .env
+
+.idea
+**/bin/
+**/obj/
+.vs/
+CopilotIndices/

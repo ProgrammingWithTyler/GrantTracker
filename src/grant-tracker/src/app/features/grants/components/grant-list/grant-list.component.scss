@@ -25,12 +25,11 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 12px;
-  //grid-template-columns: repeat(3, 1fr);
 }
 
 /* Card Styles */
 .grant-card {
-  padding: 12px 12px; /* reduced padding */
+  padding: 12px 12px;
   margin: 0;
   max-width: 400px;
   transition: box-shadow 0.2s ease;
@@ -58,12 +57,12 @@ mat-card-actions {
 .grant-details {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* tightened gap */
-  margin: 8px 0; /* tightened margin */
+  gap: 8px;
+  margin: 8px 0;
 }
 
 .amount, .dates, .contact {
-  gap: 6px; /* smaller gaps */
+  gap: 6px;
 }
 
 .amount {
@@ -145,12 +144,12 @@ mat-card-actions {
 /* Skeleton Loader Styles */
 .skeleton-card {
   cursor: default;
-  padding: 12px 16px; /* match card padding */
-  border-radius: 8px; /* slight rounding */
+  padding: 12px 16px;
+  border-radius: 8px;
 }
 
 .skeleton-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12); /* same hover effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
 .skeleton-line {

@@ -1,7 +1,19 @@
+using GrantTracker.Application.Interfaces.Repositories;
+using GrantTracker.Infrastructure.Persistence;
+using GrantTracker.Infrastructure.Persistence.Seeders;
+using GrantTracker.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
-var config = builder.Configuration;
+var configuration = builder.Configuration;
+
+services.AddDbContext<GrantDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+services.AddScoped<IGrantRepository, GrantRepository>();
+
 
 services.AddOpenApi();
 services.AddControllers();
@@ -9,10 +21,28 @@ services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.MapOpenApi();
+
+//    using (var scope = app.Services.CreateScope())
+//    {
+//        var context = scope.ServiceProvider.GetRequiredService<GrantDbContext>();
+//        await GrantSeeder.SeedAsync(context);
+//    }
+//}
+//}
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    configuration.AddUserSecrets<Program>();
+
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<GrantDbContext>();
+    await GrantSeeder.SeedAsync(context);
 }
+
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

@@ -4,10 +4,24 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-    </PropertyGroup>
+      <UserSecretsId>0af5ee70-a4d9-4acb-9dcf-45aecc7b2319</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\GrantTracker.Application\GrantTracker.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.8" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.8" />
     </ItemGroup>
 
     <!-- Optional: Add EF Core here if needed -->

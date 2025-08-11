@@ -2,7 +2,7 @@ using GrantTracker.Domain.Enum;
 
 namespace GrantTracker.Domain.Entities;
 
-public class Grant
+public class Grant : AuditableEntity
 {
     public Guid Id { get; set; } 
 

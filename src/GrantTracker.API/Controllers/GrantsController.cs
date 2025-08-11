@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using GrantTracker.Application.Interfaces.Repositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GrantTracker.API.Controllers
@@ -7,16 +9,19 @@ namespace GrantTracker.API.Controllers
     [ApiController]
     public class GrantsController : ControllerBase
     {
-        public GrantsController()
+        private readonly ILogger<GrantsController> _logger;
+        private readonly IGrantRepository _repository;
+        public GrantsController(ILogger<GrantsController> logger, IGrantRepository repository)
         {
-            // Placeholder for future DI
+            _logger = logger;
+            _repository = repository;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            // Return 204 No Content for now
-            return Ok("Inside GET grants controller.");
+            var grants = await _repository.GetAllAsync();
+            return Ok(grants);
         }
     }
 }

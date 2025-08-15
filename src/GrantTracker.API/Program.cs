@@ -1,4 +1,10 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using GrantTracker.API.Validators;
 using GrantTracker.Application.Interfaces.Repositories;
+using GrantTracker.Application.Interfaces.Services;
+using GrantTracker.Application.MappingProfiles;
+using GrantTracker.Application.Services;
 using GrantTracker.Infrastructure.Persistence;
 using GrantTracker.Infrastructure.Persistence.Seeders;
 using GrantTracker.Infrastructure.Repositories;
@@ -12,8 +18,16 @@ var configuration = builder.Configuration;
 services.AddDbContext<GrantDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-services.AddScoped<IGrantRepository, GrantRepository>();
+// Fixed AutoMapper registration - most compatible approach
+services.AddAutoMapper(typeof(GrantMappingProfile));
 
+
+// Fixed FluentValidation registration - single line finds all validators
+services.AddValidatorsFromAssemblyContaining<CreateGrantDtoValidator>();
+services.AddFluentValidationAutoValidation();
+
+services.AddScoped<IGrantRepository, GrantRepository>();
+services.AddScoped<IGrantService, GrantService>();
 
 services.AddOpenApi();
 services.AddControllers();
@@ -21,17 +35,6 @@ services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.MapOpenApi();
-
-//    using (var scope = app.Services.CreateScope())
-//    {
-//        var context = scope.ServiceProvider.GetRequiredService<GrantDbContext>();
-//        await GrantSeeder.SeedAsync(context);
-//    }
-//}
-//}
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -42,7 +45,6 @@ if (app.Environment.IsDevelopment())
     var context = scope.ServiceProvider.GetRequiredService<GrantDbContext>();
     await GrantSeeder.SeedAsync(context);
 }
-
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

@@ -22,7 +22,7 @@ public class GrantRepository : IGrantRepository
         return await _context.Grants.FindAsync(grantId);
     }
 
-    public async Task<IEnumerable<Grant?>> GetAllAsync()
+    public async Task<IEnumerable<Grant>> GetAllAsync()
     {
         return await _context.Grants.ToListAsync();
     }
@@ -47,7 +47,8 @@ public class GrantRepository : IGrantRepository
             _logger.LogWarning("Cannot delete grant because it was not found");
             return;
         }
-        _context.Grants.Remove(grant);
-        await _context.SaveChangesAsync();
+    
+        _context.Grants.Remove(grant);  // Add this line
+        await _context.SaveChangesAsync();  // Add this line
     }
 }

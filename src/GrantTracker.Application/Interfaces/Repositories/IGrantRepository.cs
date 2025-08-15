@@ -6,9 +6,9 @@ namespace GrantTracker.Application.Interfaces.Repositories;
 
 public interface IGrantRepository
 {
-    Task<IEnumerable<Grant?>> GetAllAsync();
+    Task<IEnumerable<Grant>> GetAllAsync();
     Task<Grant?> GetByIdAsync(Guid grantId);
-    Task AddAsync(Grant grantId);
-    Task UpdateAsync(Grant grantId);
+    Task AddAsync(Grant grant);
+    Task UpdateAsync(Grant grant);
     Task DeleteAsync(Guid grantId);
 }

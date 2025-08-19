@@ -10,5 +10,10 @@ export const GRANT_ROUTES: Routes = [
     path: 'request',
     loadComponent: () => import('./components/grant-request/grant-request.component')
       .then(g => g.GrantRequestComponent)
+  },
+  {
+    path: ':id',
+    loadComponent: () => import('./components/grant-details/grant-details.component')
+      .then(c => c.GrantDetailsComponent)
   }
 ];

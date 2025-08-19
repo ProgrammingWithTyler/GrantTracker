@@ -18,11 +18,19 @@ var configuration = builder.Configuration;
 services.AddDbContext<GrantDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Fixed AutoMapper registration - most compatible approach
 services.AddAutoMapper(typeof(GrantMappingProfile));
 
+services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
-// Fixed FluentValidation registration - single line finds all validators
 services.AddValidatorsFromAssemblyContaining<CreateGrantDtoValidator>();
 services.AddFluentValidationAutoValidation();
 
@@ -34,11 +42,9 @@ services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-
     configuration.AddUserSecrets<Program>();
 
     using var scope = app.Services.CreateScope();
@@ -47,6 +53,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAngularDev");
 app.UseAuthorization();
 app.MapControllers();
 

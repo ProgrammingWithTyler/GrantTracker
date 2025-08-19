@@ -214,5 +214,92 @@ mat-card-actions {
     background-color: #f0f0f0;
   }
 }
+.loading-container .loading-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+}
+.loading-container .loading-message mat-spinner {
+  margin-right: 8px;
+}
+
+.error-container,
+.empty-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+.error-container .error-card,
+.error-container .empty-card,
+.empty-container .error-card,
+.empty-container .empty-card {
+  max-width: 500px;
+  text-align: center;
+}
+.error-container .error-card .error-content,
+.error-container .error-card .empty-content,
+.error-container .empty-card .error-content,
+.error-container .empty-card .empty-content,
+.empty-container .error-card .error-content,
+.empty-container .error-card .empty-content,
+.empty-container .empty-card .error-content,
+.empty-container .empty-card .empty-content {
+  padding: 24px;
+}
+.error-container .error-card .error-content .error-icon,
+.error-container .error-card .error-content .empty-icon,
+.error-container .error-card .empty-content .error-icon,
+.error-container .error-card .empty-content .empty-icon,
+.error-container .empty-card .error-content .error-icon,
+.error-container .empty-card .error-content .empty-icon,
+.error-container .empty-card .empty-content .error-icon,
+.error-container .empty-card .empty-content .empty-icon,
+.empty-container .error-card .error-content .error-icon,
+.empty-container .error-card .error-content .empty-icon,
+.empty-container .error-card .empty-content .error-icon,
+.empty-container .error-card .empty-content .empty-icon,
+.empty-container .empty-card .error-content .error-icon,
+.empty-container .empty-card .error-content .empty-icon,
+.empty-container .empty-card .empty-content .error-icon,
+.empty-container .empty-card .empty-content .empty-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #9e9e9e; /* Updated: Direct color instead of mat-color */
+  margin-bottom: 16px;
+}
+.error-container .error-card .error-content h3,
+.error-container .error-card .empty-content h3,
+.error-container .empty-card .error-content h3,
+.error-container .empty-card .empty-content h3,
+.empty-container .error-card .error-content h3,
+.empty-container .error-card .empty-content h3,
+.empty-container .empty-card .error-content h3,
+.empty-container .empty-card .empty-content h3 {
+  margin-bottom: 8px;
+  color: #616161; /* Updated: Direct color instead of mat-color */
+}
+.error-container .error-card .error-content p,
+.error-container .error-card .empty-content p,
+.error-container .empty-card .error-content p,
+.error-container .empty-card .empty-content p,
+.empty-container .error-card .error-content p,
+.empty-container .error-card .empty-content p,
+.empty-container .empty-card .error-content p,
+.empty-container .empty-card .empty-content p {
+  margin-bottom: 24px;
+  color: #757575; /* Updated: Direct color instead of mat-color */
+}
+
+.clickable-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.clickable-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
 /*# sourceMappingURL=grant-list.component.css.map */

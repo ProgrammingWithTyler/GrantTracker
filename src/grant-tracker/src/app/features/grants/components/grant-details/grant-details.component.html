@@ -1,0 +1,139 @@
+<div class="grant-details-container">
+
+  <!-- Header with Back Button -->
+  <div class="header">
+    <button mat-icon-button (click)="onBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Grant Details</h1>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-card class="loading-card">
+      <mat-card-content>
+        <div class="loading-content">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading grant details...</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="hasError" class="error-container">
+    <mat-card class="error-card">
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon class="error-icon">error_outline</mat-icon>
+          <h3>Unable to Load Grant</h3>
+          <p>{{ errorMessage }}</p>
+          <div class="error-actions">
+            <button mat-raised-button color="primary" (click)="onRetryLoad()">
+              <mat-icon>refresh</mat-icon>
+              Try Again
+            </button>
+            <button mat-button (click)="onBack()">
+              <mat-icon>arrow_back</mat-icon>
+              Back to List
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Grant Details -->
+  <div *ngIf="!isLoading && !hasError && grant" class="grant-content">
+
+    <!-- Main Grant Information Card -->
+    <mat-card class="main-info-card">
+      <mat-card-header>
+        <div class="header-content">
+          <div class="title-section">
+            <mat-card-title>{{ grant.title }}</mat-card-title>
+            <mat-card-subtitle>{{ grant.fundingSource }}</mat-card-subtitle>
+          </div>
+          <div class="status-section">
+            <mat-chip [class]="getStatusColor()" class="status-chip">
+              <mat-icon>{{ getStatusIcon() }}</mat-icon>
+              {{ grant.status }}
+            </mat-chip>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="grant-summary">
+
+          <!-- Amount -->
+          <div class="info-row">
+            <mat-icon class="info-icon">attach_money</mat-icon>
+            <div class="info-content">
+              <span class="info-label">Grant Amount</span>
+              <span class="info-value amount-value">{{ grant.amount | currency }}</span>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Dates -->
+          <div class="info-row">
+            <mat-icon class="info-icon">calendar_today</mat-icon>
+            <div class="info-content">
+              <span class="info-label">Submission Date</span>
+              <span class="info-value">{{ grant.submissionDate | date:'fullDate' }}</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <mat-icon class="info-icon">event</mat-icon>
+            <div class="info-content">
+              <span class="info-label">Due Date</span>
+              <span class="info-value">{{ grant.dueDate | date:'fullDate' }}</span>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Contact -->
+          <div class="info-row">
+            <mat-icon class="info-icon">email</mat-icon>
+            <div class="info-content">
+              <span class="info-label">Contact Email</span>
+              <a href="mailto:{{ grant.contactEmail }}" class="info-value email-link">
+                {{ grant.contactEmail }}
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" (click)="onApply()"
+              [disabled]="grant.status === 'Closed' || grant.status === 'Rejected'">
+        <mat-icon>send</mat-icon>
+        Apply
+      </button>
+
+      <button mat-raised-button color="accent" (click)="onSave()">
+        <mat-icon>bookmark</mat-icon>
+        Save
+      </button>
+
+      <button mat-button (click)="onEdit()">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+
+      <button mat-button color="warn" (click)="onDelete()">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    </div>
+
+  </div>
+</div>

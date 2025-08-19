@@ -4,45 +4,50 @@
     <p class="subtitle">Track and manage educational grants</p>
   </div>
 
-  <div *ngIf="isLoading" class="grants-grid">
-    <mat-card *ngFor="let skeleton of [1,2,3]" class="grant-card skeleton-card">
-      <mat-card-header>
-        <div class="skeleton-line title-skeleton"></div>
-        <div class="skeleton-line subtitle-skeleton"></div>
-      </mat-card-header>
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="grants-grid">
+      <mat-card *ngFor="let skeleton of [1,2,3]" class="grant-card skeleton-card">
+        <!-- Skeleton template -->
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && errorMessage" class="error-container">
+    <mat-card class="error-card">
       <mat-card-content>
-        <div class="grant-details">
-          <div class="amount">
-            <div class="skeleton-circle"></div>
-            <div class="skeleton-line amount-skeleton"></div>
-          </div>
-          <div class="dates">
-            <div class="date-item">
-              <div class="skeleton-circle"></div>
-              <div class="skeleton-line date-skeleton"></div>
-            </div>
-            <div class="date-item">
-              <div class="skeleton-circle"></div>
-              <div class="skeleton-line date-skeleton"></div>
-            </div>
-          </div>
-          <div class="contact">
-            <div class="skeleton-circle"></div>
-            <div class="skeleton-line email-skeleton"></div>
-          </div>
-        </div>
+        <mat-icon class="error-icon">error_outline</mat-icon>
+        <h3>Oops! Something went wrong</h3>
+        <p>{{ errorMessage }}</p>
+        <button mat-raised-button color="primary" (click)="onRetryLoad()">
+          <mat-icon>refresh</mat-icon>
+          Try Again
+        </button>
       </mat-card-content>
-      <mat-card-actions>
-        <div class="skeleton-line status-skeleton"></div>
-        <div class="spacer"></div>
-        <div class="skeleton-line button-skeleton"></div>
-      </mat-card-actions>
     </mat-card>
   </div>
 
-  <!-- YOUR ORIGINAL CODE - Just change the *ngIf condition -->
-  <div class="grants-grid" *ngIf="!isLoading && (grants$ | async) as grants">
-    <mat-card *ngFor="let grant of grants" class="grant-card">
+  <!-- Empty -->
+  <div *ngIf="!isLoading && !errorMessage && (grants$ | async)?.length === 0" class="empty-container">
+    <mat-card class="empty-card">
+      <mat-card-content>
+        <mat-icon class="empty-icon">assignment</mat-icon>
+        <h3>No grants available</h3>
+        <p>There are currently no grants to display. Check back later.</p>
+        <button mat-raised-button color="primary" (click)="onRetryLoad()">
+          <mat-icon>refresh</mat-icon>
+          Refresh
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- List -->
+  <div class="grants-grid" *ngIf="!isLoading && !errorMessage && (grants$ | async)?.length > 0">
+    <mat-card *ngFor="let grant of grants$ | async; trackBy: trackByGrantId"
+              class="grant-card clickable-card"
+              (click)="onViewDetails(grant)">
       <mat-card-header>
         <mat-card-title>{{ grant.title }}</mat-card-title>
         <mat-card-subtitle>{{ grant.fundingSource }}</mat-card-subtitle>
@@ -54,7 +59,6 @@
             <mat-icon>attach_money</mat-icon>
             <span class="amount-value">{{ grant.amount | currency }}</span>
           </div>
-
           <div class="dates">
             <div class="date-item">
               <mat-icon>calendar_today</mat-icon>
@@ -65,7 +69,6 @@
               <span>Due: {{ grant.dueDate | date:'MMM d, y' }}</span>
             </div>
           </div>
-
           <div class="contact">
             <mat-icon>email</mat-icon>
             <span>{{ grant.contactEmail }}</span>
@@ -74,13 +77,16 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <mat-chip
-          [class]="'status-' + grant.status.toLowerCase()"
-          class="status-chip">
+        <mat-chip [class]="'status-' + grant.status.toLowerCase()" class="status-chip">
           {{ grant.status }}
         </mat-chip>
         <div class="spacer"></div>
-        <button mat-button color="primary">View Details</button>
+        <button mat-button
+                color="primary"
+                (click)="onViewDetails(grant); $event.stopPropagation()">
+          <mat-icon>visibility</mat-icon>
+          View Details
+        </button>
       </mat-card-actions>
     </mat-card>
   </div>

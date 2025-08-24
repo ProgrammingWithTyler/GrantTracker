@@ -3,8 +3,8 @@ export interface Grant {
   title: string;
   fundingSource: string;
   amount: number;
-  status: 'Pending' | 'Approved' | 'Rejected' | 'Closed';
-  submissionDate: Date;
+  status: 'Draft' | 'Submitted' | 'Pending' | 'Approved' | 'Rejected' | 'Closed';
+  submissionDate?: Date;
   dueDate: Date;
   contactEmail: string;
 }

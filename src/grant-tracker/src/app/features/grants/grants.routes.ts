@@ -7,9 +7,19 @@ export const GRANT_ROUTES: Routes = [
       .then(c => c.GrantListComponent)
   },
   {
+    path: 'new',
+    loadComponent: () => import('./components/grant-form/grant-form.component')
+      .then(c => c.GrantFormComponent)
+  },
+  {
     path: 'request',
     loadComponent: () => import('./components/grant-request/grant-request.component')
       .then(g => g.GrantRequestComponent)
+  },
+  {
+    path: ':id/edit',
+    loadComponent: () => import('./components/grant-form/grant-form.component')
+      .then(c => c.GrantFormComponent)
   },
   {
     path: ':id',

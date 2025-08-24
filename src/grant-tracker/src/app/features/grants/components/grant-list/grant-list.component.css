@@ -293,6 +293,21 @@ mat-card-actions {
   color: #757575; /* Updated: Direct color instead of mat-color */
 }
 
+.empty-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+@media (max-width: 600px) {
+  .empty-actions {
+    flex-direction: column;
+  }
+  .empty-actions button {
+    width: 100%;
+  }
+}
+
 .clickable-card {
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;

@@ -1,11 +1,21 @@
-<div class="grant-list-container">
+<div class="grant-list-container" *ngIf="state$ | async as state">
   <div class="header">
-    <h1>Grant Management</h1>
-    <p class="subtitle">Track and manage educational grants</p>
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Grant Management</h1>
+        <p class="subtitle">Track and manage educational grants</p>
+      </div>
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="onCreateNew()">
+          <mat-icon>add</mat-icon>
+          New Grant
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Loading -->
-  <div *ngIf="isLoading" class="loading-container">
+  <div *ngIf="state.isLoading" class="loading-container">
     <div class="grants-grid">
       <mat-card *ngFor="let skeleton of [1,2,3]" class="grant-card skeleton-card">
         <!-- Skeleton template -->
@@ -14,12 +24,12 @@
   </div>
 
   <!-- Error -->
-  <div *ngIf="!isLoading && errorMessage" class="error-container">
+  <div *ngIf="!state.isLoading && state.errorMessage" class="error-container">
     <mat-card class="error-card">
       <mat-card-content>
         <mat-icon class="error-icon">error_outline</mat-icon>
         <h3>Oops! Something went wrong</h3>
-        <p>{{ errorMessage }}</p>
+        <p>{{ state.errorMessage }}</p>
         <button mat-raised-button color="primary" (click)="onRetryLoad()">
           <mat-icon>refresh</mat-icon>
           Try Again
@@ -29,23 +39,29 @@
   </div>
 
   <!-- Empty -->
-  <div *ngIf="!isLoading && !errorMessage && (grants$ | async)?.length === 0" class="empty-container">
+  <div *ngIf="!state.isLoading && !state.errorMessage && state.grants.length === 0" class="empty-container">
     <mat-card class="empty-card">
       <mat-card-content>
         <mat-icon class="empty-icon">assignment</mat-icon>
         <h3>No grants available</h3>
-        <p>There are currently no grants to display. Check back later.</p>
-        <button mat-raised-button color="primary" (click)="onRetryLoad()">
-          <mat-icon>refresh</mat-icon>
-          Refresh
-        </button>
+        <p>There are currently no grants to display. Check back later or create your first grant.</p>
+        <div class="empty-actions">
+          <button mat-raised-button color="primary" (click)="onCreateNew()">
+            <mat-icon>add</mat-icon>
+            Create New Grant
+          </button>
+          <button mat-button (click)="onRetryLoad()">
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>
 
   <!-- List -->
-  <div class="grants-grid" *ngIf="!isLoading && !errorMessage && (grants$ | async)?.length > 0">
-    <mat-card *ngFor="let grant of grants$ | async; trackBy: trackByGrantId"
+  <div class="grants-grid" *ngIf="!state.isLoading && !state.errorMessage && state.grants.length > 0">
+    <mat-card *ngFor="let grant of state.grants; trackBy: trackByGrantId"
               class="grant-card clickable-card"
               (click)="onViewDetails(grant)">
       <mat-card-header>

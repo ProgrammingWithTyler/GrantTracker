@@ -104,8 +104,7 @@ export class GrantDetailsComponent implements OnInit {
 
   onEdit(): void {
     if (this.grant?.id) {
-      // TODO: Navigate to edit page when implemented
-      this.showInfoMessage('Edit functionality will be implemented in future missions.');
+      this.router.navigate(['/grants', this.grant.id, 'edit']);
     }
   }
 

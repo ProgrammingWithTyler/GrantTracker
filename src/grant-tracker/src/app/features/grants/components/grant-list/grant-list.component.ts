@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,8 +10,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { GrantDataService } from '../../services/grant-data.service';
 import { Grant } from '../../../../core/models/grant.model';
-import { Observable, of } from 'rxjs';
-import { catchError, finalize, startWith, map } from 'rxjs/operators';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { catchError, finalize, map, shareReplay } from 'rxjs/operators';
+
+interface GrantListState {
+  grants: Grant[];
+  isLoading: boolean;
+  errorMessage: string;
+}
 
 @Component({
   selector: 'gt-grant-list',
@@ -29,10 +35,24 @@ import { catchError, finalize, startWith, map } from 'rxjs/operators';
   templateUrl: './grant-list.component.html',
   styleUrls: ['./grant-list.component.scss']
 })
-export class GrantListComponent {
-  grants$!: Observable<Grant[]>;
-  isLoading = true;
-  errorMessage = '';
+export class GrantListComponent implements OnInit {
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  private errorSubject = new BehaviorSubject<string>('');
+  private grantsSubject = new BehaviorSubject<Grant[]>([]);
+
+  // Combined state observable
+  state$: Observable<GrantListState> = combineLatest([
+    this.grantsSubject,
+    this.loadingSubject,
+    this.errorSubject
+  ]).pipe(
+    map(([grants, isLoading, errorMessage]) => ({
+      grants,
+      isLoading,
+      errorMessage
+    })),
+    shareReplay(1)
+  );
 
   constructor(
     private grantDataService: GrantDataService,
@@ -45,20 +65,21 @@ export class GrantListComponent {
   }
 
   loadGrants(): void {
-    this.isLoading = true;
-    this.errorMessage = '';
+    this.loadingSubject.next(true);
+    this.errorSubject.next('');
 
-    this.grants$ = this.grantDataService.getGrants().pipe(
+    this.grantDataService.getGrants().pipe(
       catchError((err) => {
         console.error('Error loading grants:', err);
-        this.errorMessage = 'Unable to load grants. Please try again later.';
-        this.showErrorMessage(this.errorMessage);
-        return of([]); // fallback to empty list
+        const errorMessage = 'Unable to load grants. Please try again later.';
+        this.errorSubject.next(errorMessage);
+        this.showErrorMessage(errorMessage);
+        return [];
       }),
-      finalize(() => {
-        this.isLoading = false;
-      })
-    );
+      finalize(() => this.loadingSubject.next(false))
+    ).subscribe(grants => {
+      this.grantsSubject.next(grants);
+    });
   }
 
   onViewDetails(grant: Grant): void {
@@ -72,6 +93,11 @@ export class GrantListComponent {
   onRetryLoad(): void {
     this.loadGrants();
   }
+
+  onCreateNew(): void {
+    this.router.navigate(['/grants/new']);
+  }
+
 
   private showErrorMessage(message: string): void {
     this.snackBar.open(message, 'Close', { duration: 5000 });

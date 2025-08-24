@@ -1,0 +1,151 @@
+<div class="grant-form-container">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
+        {{ pageTitle }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Loading Spinner -->
+      <div *ngIf="isLoading" class="loading-container">
+        <mat-spinner></mat-spinner>
+        <p>Loading grant data...</p>
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="grantForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading" class="grant-form">
+        <!-- Title Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Grant Title *</mat-label>
+          <input
+            matInput
+            formControlName="title"
+            placeholder="Enter the grant title"
+            maxlength="200">
+          <mat-hint align="end">{{ grantForm.get('title')?.value?.length || 0 }}/200</mat-hint>
+          <mat-error *ngIf="isFieldInvalid('title')">
+            {{ getFieldError('title') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Funding Source Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Funding Source *</mat-label>
+          <input
+            matInput
+            formControlName="fundingSource"
+            placeholder="Enter the funding organization"
+            maxlength="100">
+          <mat-hint align="end">{{ grantForm.get('fundingSource')?.value?.length || 0 }}/100</mat-hint>
+          <mat-error *ngIf="isFieldInvalid('fundingSource')">
+            {{ getFieldError('fundingSource') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Amount Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Grant Amount *</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="amount"
+            placeholder="0"
+            min="1"
+            max="999999999">
+          <span matPrefix>$ &nbsp;</span>
+          <mat-error *ngIf="isFieldInvalid('amount')">
+            {{ getFieldError('amount') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Status Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Status *</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let status of statusOptions" [value]="status.value">
+              {{ status.label }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="isFieldInvalid('status')">
+            {{ getFieldError('status') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Date Fields Row -->
+        <div class="date-row">
+          <!-- Submission Date Field -->
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Submission Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="submissionPicker"
+              formControlName="submissionDate"
+              placeholder="Select date">
+            <mat-datepicker-toggle matSuffix [for]="submissionPicker"></mat-datepicker-toggle>
+            <mat-datepicker #submissionPicker></mat-datepicker>
+            <mat-error *ngIf="isFieldInvalid('submissionDate')">
+              {{ getFieldError('submissionDate') }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Due Date Field -->
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Due Date *</mat-label>
+            <input
+              matInput
+              [matDatepicker]="duePicker"
+              formControlName="dueDate"
+              placeholder="Select date">
+            <mat-datepicker-toggle matSuffix [for]="duePicker"></mat-datepicker-toggle>
+            <mat-datepicker #duePicker></mat-datepicker>
+            <mat-error *ngIf="isFieldInvalid('dueDate')">
+              {{ getFieldError('dueDate') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Contact Email Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contact Email *</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="contactEmail"
+            placeholder="contact@example.com"
+            maxlength="100">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-hint align="end">{{ grantForm.get('contactEmail')?.value?.length || 0 }}/100</mat-hint>
+          <mat-error *ngIf="isFieldInvalid('contactEmail')">
+            {{ getFieldError('contactEmail') }}
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <!-- Cancel Button -->
+      <button
+        mat-button
+        type="button"
+        (click)="onCancel()"
+        [disabled]="isSaving">
+        <mat-icon>close</mat-icon>
+        Cancel
+      </button>
+
+      <!-- Save Button -->
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        (click)="onSubmit()"
+        [disabled]="grantForm.invalid || isSaving">
+        <mat-spinner *ngIf="isSaving" diameter="20" class="save-spinner"></mat-spinner>
+        <mat-icon *ngIf="!isSaving">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+        {{ isSaving ? 'Saving...' : (isEditMode ? 'Update Grant' : 'Create Grant') }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
